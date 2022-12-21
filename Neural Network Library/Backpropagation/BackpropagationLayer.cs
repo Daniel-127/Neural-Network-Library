@@ -4,7 +4,7 @@
     {
         protected readonly Layer Layer;
 
-        protected readonly float[] Da, Db, Dz;
+        protected readonly float[] Da, Dz, Db;
         protected readonly float[,] Dw;
 
         private int epochCount;
@@ -14,6 +14,7 @@
             Layer = layer;
 
             Da = new float[layer.a.Length];
+            Dz = new float[layer.z.Length];
             Db = new float[layer.b.Length];
             Dz = new float[layer.z.Length];
             Dw = new float[layer.w.GetLength(0), layer.w.GetLength(1)];

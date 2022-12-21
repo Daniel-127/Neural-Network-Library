@@ -3,19 +3,20 @@
     public class Backpropagation
     {
         private readonly NeuralNetwork network;
-        private readonly Datapoint[] trainData; // Manage dataset, where some is for training, some is for learning, automatically
-        private readonly Datapoint[] testData; // Manage dataset, where some is for training, some is for learning, automatically
+        private readonly Datapoint[] trainData;
+        private readonly Datapoint[] testData;
 
         private readonly Layer[] networkLayers;
         private readonly BackpropagationLayer[] backpropagationLayers;
         private readonly BackpropagationOutputLayer outputLayer;
 
-        private Cost c;
+        private readonly NetworkEvaluator evaluator;
 
         public Backpropagation(NeuralNetwork network, Datapoint[] trainData, Datapoint[] testData)
         {
             this.trainData = trainData;
             this.testData = testData;
+
             this.network = network;
             networkLayers = network.layers;
 
@@ -29,7 +30,7 @@
                 backpropagationLayers[i] = new BackpropagationHiddenLayer(networkLayers[i], backpropagationLayers[i + 1]);
             }
 
-            c = new Cost(network);
+            evaluator = new NetworkEvaluator(network);
         }
 
         public void Run(int iterations, int epochSize, float learnRate, int evaluationPeriod)
@@ -39,10 +40,9 @@
                 Train(i, epochSize, learnRate);
                 if (i % evaluationPeriod == 0)
                 {
-                    c.PrintCost(testData);
-                    c.PrintPrecision(testData);
+                    evaluator.Evaulate(testData);
+                    evaluator.PrintPerformance();
                 }
-                //c.PrintCost(dataset[36000..38000]); // Automatically manage this please!!
             }
         }
 
