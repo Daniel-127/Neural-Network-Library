@@ -1,6 +1,5 @@
 ﻿using Neural_Network_Library;
 using Neural_Network_Library.Backpropagation;
-using static YggdrasilCore.Printer;
 
 namespace NumImgTest
 {
@@ -8,15 +7,19 @@ namespace NumImgTest
     {
         private static void Main(string[] args)
         {
-            Datapoint[] dataset = ImportDataset(@"C:\Users\gabri\Desktop\Code Shit\train.csv");
+            //Datapoint[] dataset = ImportDataset(@"C:\Users\gabri\Desktop\Code Shit\train.csv");
+            Datapoint[] dataset = MNISTReader.TrainingData();
             Datapoint[] trainset = dataset[0..40000];
             Datapoint[] testset = dataset[40000..42000];
 
             int[] layers = { 784, 16, 16, 10 };
             NeuralNetwork network = new NeuralNetwork(layers);
-            Backpropagation backpropagation = new Backpropagation(network, trainset);
+            Backpropagation backpropagation = new Backpropagation(network, trainset, testset);
 
-            backpropagation.Run(500, 100, 0.1f);
+            while(Console.ReadLine() != "exit")
+            {
+                backpropagation.Run(2000, 50, 0.5f, 200);
+            }
 
             /*Bitmap[] bmp = new Bitmap[dataset.Length];
             for (int i = 0; i < 200; i++)
